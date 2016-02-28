@@ -1,4 +1,4 @@
-# sudoku
+# Sudoku
 Sock Monkey Sudoku Web App
 
 - MVC Framework:
