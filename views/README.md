@@ -1,1 +1,2 @@
-- Templates (TWIG/HTML) should go here! -
+# Views
+- Templates (TWIG/HTML) should go here!
