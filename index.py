@@ -3,7 +3,6 @@
 #----------------------------------------------------------------
 #================================================================
 from bottle import default_app, route
-from src.Model.Board import Gameboard
 
 @route('/')
 def home_page():
