@@ -1,5 +1,3 @@
-NONE = -1
-
 #================================================================
 class Cell:
 #================================================================
@@ -7,14 +5,12 @@ class Cell:
 	#--------------------------------------------------------
 	# - Cell Constructor
 	#--------------------------------------------------------
-	# * solution : The correct answer for this cell.
-	# * mutable : is this cell read-only or to-be-solved?
+	# * solution : the correct answer for this cell.
 	#--------------------------------------------------------
-	def __init__(self, solution, mutable = True):
+	def __init__(self, solution):
+		self.answer_ = solution
 		self.solution_ = solution
-		self.mutable_ = mutable
-
-		self.answer_ = NONE if mutable else solution
+		self.mutable_ = False
 
 	#--------------------------------------------------------
 	# - Get Current Given Answer
@@ -28,13 +24,24 @@ class Cell:
 	#--------------------------------------------------------
 	# - Submit Answer
 	#--------------------------------------------------------
-	# sets the answer for this cell to the provided argument
-	# IF the cell is mutable.
+	# sets the cell's given answer to the user's guess IF the
+	# cell is mutable.
+	# returns True if the user's guess was correct.
 	#--------------------------------------------------------
 	def submitAnswer(self, answer):
 		if(self.mutable_):
 			self.answer_ = max(NONE, min(answer, 9))
 		return self.isCorrect()			
+
+	#--------------------------------------------------------
+	# Hide Given Solution
+	#--------------------------------------------------------
+	# sets the cell's answer to None given and makes it
+	# mutable, allowing this cell to be solved by the user.
+	#--------------------------------------------------------
+	def hideAnswer(self):
+		self.answer_ = None
+		self.mutable_ = True
 
 	#--------------------------------------------------------
 	# - Is This Cell Mutable ?
@@ -63,7 +70,7 @@ class Cell:
 		return self.solution_
 
 # Members:
-	answer_ = NONE
-	solution_ = NONE
+	answer_ = None
+	solution_ = None
 	mutable_ = False
 #================================================================
