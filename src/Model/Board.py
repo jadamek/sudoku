@@ -15,6 +15,7 @@ class Board:
 
 		self.board_ = self.generate(solutions)
 		self.unsolved_ = solutions
+		self.incorrect_ = solutions
 
 	#--------------------------------------------------------
 	# - Get Raw Board Array
@@ -73,7 +74,10 @@ class Board:
 	# In a correct solution, each number should be unique.
 	#--------------------------------------------------------
 	def getRow(self, index):
-		return None
+		if index not in range(0, 9):
+			return None
+		else:
+			return self.board_[index]
 
 	#--------------------------------------------------------
 	# - Get Column
@@ -83,7 +87,10 @@ class Board:
 	# In a correct solution, each number should be unique.
 	#--------------------------------------------------------
 	def getColumn(self, index):
-		return None
+		if index not in range(0, 9):
+			return None
+		else:
+			return [self.board_[row][index] for row in range(0, 9)]
 
 	#--------------------------------------------------------
 	# - Get 3x3 Block
@@ -94,7 +101,10 @@ class Board:
 	# In a correct solution, each number should be unique.
 	#--------------------------------------------------------
 	def getBlock(self, x, y):
-		return None
+		if x not in range(0, 3) or y not in range(0, 3):
+			return None
+		else:
+			return [self.board_[row + y * 3][3 * x : 3 * x + 3] for row in range(0, 3)]
 
 	#--------------------------------------------------------
 	# - Get Individual Cell
@@ -154,11 +164,15 @@ class Board:
 	#--------------------------------------------------------
 	# - Is the Puzzle Solved?
 	#--------------------------------------------------------
-	# returns True if the sudoku has been succesfully solved,
-	# as tracked by the number of remaining unsolved cells.
+	# returns 'Correct' if the sudoku has been succesfully
+	# solved, 'Incorrect' if solved but invalidly, and
+	# 'Incomplete' otherwise.
 	#--------------------------------------------------------
 	def isSolved(self):
-		return unsolved_ == 0
+		if self.unsolved_ > 0:
+			return 'Incomplete'
+		else:
+			 return 'Incorrect' if self.incorrect_ > 0 else 'Correct'
 
 # Members
 	board_ = []
