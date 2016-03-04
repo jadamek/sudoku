@@ -114,7 +114,10 @@ class Board:
 	# returns the exact Cell located at (x, y)
 	#--------------------------------------------------------
 	def getCell(self, x, y):
-		return None
+		if x not in range(0, 9) or y not in range(0, 9):
+			return None
+		else:
+			return self.board_[y][x]
 
 	#--------------------------------------------------------
 	# - Submit Answer to Cell

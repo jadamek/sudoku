@@ -103,7 +103,7 @@ class Test_Board(unittest.TestCase):
 		row = random.randint(0, 8)
 		column = random.randint(0, 8)
 
-		self.assertEqual(self.board.getCell(row, column), self.board.board_[row][column], "Cell(" + str(row) + ", " + str(column) + ") did not match the board's original data.")
+		self.assertEqual(self.board.getCell(column, row), self.board.board_[row][column], "Cell(" + str(row) + ", " + str(column) + ") did not match the board's original data.")
 
 		# Calling either index out of range (0~8, 0~8) should return None
 		self.assertEqual(self.board.getBlock(-1, 0), None, "Calling cell with coords (-1, 0) did not produce a cell of None")		
