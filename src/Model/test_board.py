@@ -112,12 +112,73 @@ class Test_Board(unittest.TestCase):
 		self.assertEqual(self.board.getBlock(0, 9), None, "Calling cell with coords (0, 9) did not produce a cell of None")				
 
 	#--------------------------------------------------------------------------------
-	def test_09_submit_answer_sets_the_value_of_the_cell(self):
+	def test_09_submit_answer_sets_the_value_of_a_cell(self):
 	#--------------------------------------------------------------------------------
-		pass
+		x = None
+		y = None
+
+		for row in range(0, 9):
+			for column in range(0, 9):
+				if self.board.getCell(column, row).isMutable():
+					x = column
+					y = row
+					break
+		
+		self.assertNotEqual(x, None, "Failed to find a mutable cell.")
+		self.assertNotEqual(y, None, "Failed to find a mutable cell.")
+
+		guess = random.randint(1, 9)
+
+		self.board.submitAnswer(x, y, guess)
+		self.assertEqual(self.board.getCell(x, y).getAnswer(), guess, "failed to submit answer " + str(guess) + " to (" + str(x) + ", " + str(y) + ")")
+
+		# submitting outside either index range (0~8) or answer range (1~9) results in None
+		self.assertEqual(self.board.submitAnswer(-1, 0, guess), None, "submitted bad answer " + str(guess) + " to (-1, 0)")
+		self.assertEqual(self.board.submitAnswer(9, 0, guess), 	None, "submitted bad answer " + str(guess) + " to (9, 0)")
+		self.assertEqual(self.board.submitAnswer(0, -1, guess), None, "submitted bad answer " + str(guess) + " to (0, -1)")
+		self.assertEqual(self.board.submitAnswer(0, 9, guess),  None, "submitted bad answer " + str(guess) + " to (0, 9)")
+		self.assertEqual(self.board.submitAnswer(x, y, 0), 	None, "submitted bad answer 0 to (" + str(x) + ", " + str(y) + ")")
+		self.assertEqual(self.board.submitAnswer(x, y, 10),	None, "submitted bad answer 10 to (" + str(x) + ", " + str(y) + ")")
+		
+		# submitting correct answer should yield True
+		guess = self.board.getCell(x, y).getSolution()
+		self.assertTrue(self.board.submitAnswer(x, y, guess))
+
+		# submitting an incorrect answer should yield False
+		guess = (guess + 5) % 9 + 1
+		self.assertFalse(self.board.submitAnswer(x, y, guess))
 
 	#--------------------------------------------------------------------------------
-	def test_10_board_is_well_formed(self):
+	def test_10_board_is_complete_when_all_filled(self):
+	#--------------------------------------------------------------------------------
+		unsolved = []
+
+		for row in range(0, 9):
+			for column in range(0, 9):
+				if self.board.getCell(column, row).isMutable():
+					unsolved.append((column, row))
+
+		self.assertEqual(len(unsolved), 10, "Number of mutable cells different than constructor argument")
+
+		# fill the board with correct answers
+		for cell in unsolved:						
+			solution = self.board.getCell(cell[0], cell[1]).getSolution()
+			self.board.submitAnswer(cell[0], cell[1], solution)
+
+		# a fully completed board with all correct solutions should return 'Correct'
+		self.assertEqual(self.board.isSolved(), 'Correct', "Board was not found to be correctly completed.")
+
+		# submit an incorrect answer
+		solution = self.board.getCell(unsolved[0][0], unsolved[0][1]).getSolution()
+		incorrect = (solution + 5) % 9 + 1
+
+		self.board.submitAnswer(unsolved[0][0], unsolved[0][1], incorrect)
+
+		# a fully completed board with an incorrect solution should return 'Incorrect'
+		self.assertEqual(self.board.isSolved(), 'Incorrect', "Perturbed complete board not found to be incorrect.")
+
+	#--------------------------------------------------------------------------------
+	def test_11_board_is_well_formed(self):
 	#--------------------------------------------------------------------------------
 		pass
 

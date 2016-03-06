@@ -131,7 +131,15 @@ class Board:
 	# returns True if the user's guess was correct.
 	#--------------------------------------------------------
 	def submitAnswer(self, x, y, answer):
-		return None
+		if x not in range(0, 9) or y not in range(0, 9) or answer not in range(1, 10):
+			return None
+		else:
+			self.unsolved_ -= 1
+			oldStatus = self.board_[y][x].isCorrect()
+			correct = self.board_[y][x].submitAnswer(answer)
+			
+			self.incorrect_ += oldStatus - correct
+			return correct
 	
 	#--------------------------------------------------------
 	# - Is This Row Correctly Solved?
